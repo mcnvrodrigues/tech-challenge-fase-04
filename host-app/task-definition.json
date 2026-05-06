@@ -1,0 +1,37 @@
+{
+    "family": "host-app-task",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "executionRoleArn": "arn:aws:iam::803872155909:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "host-app",
+            "image": "REPLACE_ME",
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "NEXT_PUBLIC_REMOTE_APP_URL",
+                    "value": "REPLACE_ME"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/host-app",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ]
+}

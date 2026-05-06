@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  remote-app:
+    build:
+      context: ./remote-app
+      dockerfile: Dockerfile
+    container_name: remote-app
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  host-app:
+    build:
+      context: ./host-app
+      dockerfile: Dockerfile
+    container_name: host-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NEXT_PUBLIC_REMOTE_URL=http://remote-app:3001
+    depends_on:
+      - remote-app
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
