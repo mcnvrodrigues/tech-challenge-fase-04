@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 import { NextFederationPlugin } from "@module-federation/nextjs-mf";
 
+const remoteAppUrl =
+  process.env.NEXT_PUBLIC_REMOTE_APP_URL || "http://localhost:3001";
+
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false,
@@ -20,7 +23,7 @@ const nextConfig: NextConfig = {
           name: 'hostApp',
           filename: 'static/runtime/remoteEntry.js',
           remotes: {
-            remoteApp: `remoteApp@${process.env.NEXT_PUBLIC_REMOTE_APP_URL}/_next/static/chunks/remoteEntry.js`
+            remoteApp: `remoteApp@${remoteAppUrl}/_next/static/chunks/remoteEntry.js`
           },
           shared: {
             react: {
@@ -32,7 +35,7 @@ const nextConfig: NextConfig = {
               requiredVersion: false
             },
             "react-redux": { singleton: true },
-           '@reduxjs/toolkit': { singleton: true },
+            '@reduxjs/toolkit': { singleton: true },
           },
           extraOptions: {},
         })
