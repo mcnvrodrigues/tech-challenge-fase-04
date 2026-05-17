@@ -95,6 +95,4 @@ Com o uso de **SSG (Static Site Generation)** sempre que possível, o projeto en
 * Redução de custos operacionais
 
 ---
-###
-###
-###
+#fefe
