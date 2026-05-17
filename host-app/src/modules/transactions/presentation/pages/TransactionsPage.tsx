@@ -1,10 +1,14 @@
 import { useTransactions } from "../hooks/useTransactions";
 
 export function TransactionsPage() {
-    const { transactions, loading, balance } = useTransactions();
+    const { transactions, loading, error, balance } = useTransactions();
 
     if (loading) {
         return <p>Carregando transações...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
     }
 
     return (

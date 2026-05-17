@@ -1,35 +1,64 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import { GetStaticProps } from "next";
 
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useTransactions } from "@/hooks/useTransactions";
+import { useTransactions } from "@/modules/transactions/presentation/hooks/useTransactions";
 
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/core/store/hooks";
 
-import { addTransaction, updateTransaction, 
-  deleteTransaction  } from "@/transactionTypes/transactionSlice";
+import {
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
+} from "@/modules/transactions/state/transactionThunks";
 
 import { displayDate } from "@/utils/formatDate";
-
 import { TransactionAppProps } from "@/types";
-
 import Loading from "@/components/Loading/Loading";
 
 import style from "@/styles/transacoes.module.css";
 
 const LoadingFallback = () => <Loading />;
 
-const Menu = dynamic(() => import("remoteApp/Menu"), { ssr: false,  loading: () => <Loading /> });
+const Menu = dynamic(() => import("remoteApp/Menu"), {
+  ssr: false,
+  loading: () => <Loading />,
+});
+
+function mapHomeTypeToDomain(type: string) {
+  const normalizedType = String(type)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  if (normalizedType === "deposito" || normalizedType === "deposit") {
+    return "deposit";
+  }
+
+  if (
+    normalizedType === "transferencia" ||
+    normalizedType === "transfer"
+  ) {
+    return "transfer";
+  }
+
+  return "withdraw";
+}
 
 const TransactionApp = dynamic<TransactionAppProps>(
-  () => import("remoteApp/TransactionApp"),
-  { ssr: false, loading: () => <LoadingFallback />, }
+  () =>
+    import("remoteApp/TransactionApp") as Promise<{
+      default: React.ComponentType<TransactionAppProps>;
+    }>,
+  {
+    ssr: false,
+    loading: () => <LoadingFallback />,
+  }
 );
 
 export default function Transacoes() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { transactions } = useTransactions();
   const isMobile = useIsMobile();
@@ -41,8 +70,17 @@ export default function Transacoes() {
   }, []);
 
   if (!isMounted) {
-    return null; 
+    return null;
   }
+
+  const transactionsForRemote = transactions.map(transaction => ({
+    id: Number(transaction.id),
+    type: transaction.type === "deposit" ? "deposito" : "transferencia",
+    value: transaction.amount,
+    description: transaction.description,
+    date: transaction.createdAt.toISOString().split("T")[0],
+    attachment: null,
+  }));
 
   return (
     <>
@@ -59,16 +97,35 @@ export default function Transacoes() {
 
           <div className={style.boxStatement}>
             <TransactionApp
-              transactions={transactions}
+              transactions={transactionsForRemote}
               dateString={displayDate}
-              onCreate={(data) => {
-                dispatch(addTransaction({ id: Date.now(), ...data }));
+              onCreate={data => {
+                dispatch(
+                  addTransaction({
+                    id: String(Date.now()),
+                    type:
+                      data.type === "deposito"
+                        ? "deposit"
+                        : "transfer",
+                    amount: Number(data.value),
+                    description: data.description,
+                    createdAt: new Date(data.date),
+                  })
+                );
               }}
-              onUpdate={(updated) => {
-                dispatch(updateTransaction(updated));
+              onUpdate={updated => {
+                dispatch(
+                  updateTransaction({
+                    id: String(updated.id),
+                    type: mapHomeTypeToDomain(updated.type),
+                    amount: Number(updated.value),
+                    description: updated.description,
+                    createdAt: new Date(updated.date),
+                  })
+                );
               }}
-              onDelete={(id) => {
-                dispatch(deleteTransaction(id));
+              onDelete={id => {
+                dispatch(deleteTransaction(String(id)));
               }}
             />
           </div>
@@ -77,9 +134,3 @@ export default function Transacoes() {
     </>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  return {
-    props: {},
-  };
-};

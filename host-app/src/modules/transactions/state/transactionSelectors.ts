@@ -6,7 +6,20 @@ export const selectTransactions = (state: RootState) =>
 export const selectTransactionsLoading = (state: RootState) =>
     state.transactions.loading;
 
+export const selectTransactionsError = (state: RootState) =>
+    state.transactions.error;
+
 export const selectBalance = (state: RootState) =>
     state.transactions.items.reduce((total, transaction) => {
-        return total + transaction.amount;
+        switch (transaction.type) {
+            case "deposit":
+                return total + transaction.amount;
+
+            case "transfer":
+            case "withdraw":
+                return total - transaction.amount;
+
+            default:
+                return total;
+        }
     }, 0);

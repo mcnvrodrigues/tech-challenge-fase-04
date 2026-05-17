@@ -1,7 +1,9 @@
+
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import dynamic from 'next/dynamic';
-import store from '../store';
+//import store from '../store';
+import { store } from "@/core/store";
 
 
 import { AccessibilityProvider, useAccessibility } from "@/contexts/AccessibilityProvider";
