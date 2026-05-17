@@ -32,6 +32,7 @@ export default function Header({
             width={35}
             height={35}
             alt=""
+            loading="lazy"
           />
         </button>
 
@@ -46,6 +47,7 @@ export default function Header({
             width={40}
             height={40}
             alt=""
+            loading="lazy"
           />
         </button>
       </div>

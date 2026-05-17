@@ -1,6 +1,13 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Transaction, TransactionType } from "@/types";
-import BoxBalance from "./components/BoxBalance/BoxBalance";
+const BoxBalance = dynamic(
+  () => import("./components/BoxBalance/BoxBalance"),
+  {
+    loading: () => <p>Carregando saldo...</p>,
+    ssr: false,
+  }
+);
 import NewTransaction from "./components/NewTransaction/NewTransaction";
 import SuccessModal from "../SuccessModal/SuccessModal";
 import TransactionHomeContainer from "./components/TransactionHomeContainer/TransactionHomeContainer";
