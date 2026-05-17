@@ -5,9 +5,8 @@ const remoteAppUrl =
   process.env.NEXT_PUBLIC_REMOTE_APP_URL || "http://localhost:3001";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: false,
-  output: 'standalone',
+  output: "standalone",
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -15,27 +14,31 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   webpack: (config, { isServer }) => {
-    config.output.publicPath = 'auto';
+    config.output.publicPath = "auto";
 
     if (!isServer) {
       config.plugins.push(
         new NextFederationPlugin({
-          name: 'hostApp',
-          filename: 'static/runtime/remoteEntry.js',
+          name: "hostApp",
+          filename: "static/runtime/remoteEntry.js",
           remotes: {
-            remoteApp: `remoteApp@${remoteAppUrl}/_next/static/chunks/remoteEntry.js`
+            remoteApp: `remoteApp@${remoteAppUrl}/_next/static/chunks/remoteEntry.js`,
           },
           shared: {
             react: {
               singleton: true,
-              requiredVersion: false
+              requiredVersion: false,
             },
-            'react-dom': {
+            "react-dom": {
               singleton: true,
-              requiredVersion: false
+              requiredVersion: false,
             },
-            "react-redux": { singleton: true },
-            '@reduxjs/toolkit': { singleton: true },
+            "react-redux": {
+              singleton: true,
+            },
+            "@reduxjs/toolkit": {
+              singleton: true,
+            },
           },
           extraOptions: {},
         })
@@ -43,13 +46,14 @@ const nextConfig: NextConfig = {
     } else {
       config.resolve.alias = {
         ...config.resolve.alias,
-        'remoteApp/Button': false,
-        'remoteApp/HeaderContainer': false,
-        'remoteApp/Menu': false,
-        'remoteApp/HomeApp': false,
-        'remoteApp/TransactionApp': false,
+        "remoteApp/Button": false,
+        "remoteApp/HeaderContainer": false,
+        "remoteApp/Menu": false,
+        "remoteApp/HomeApp": false,
+        "remoteApp/TransactionApp": false,
       };
     }
+
     return config;
   },
 };
