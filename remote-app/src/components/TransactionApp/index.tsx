@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 
 import { Transaction, TransactionType } from "@/types";
 
@@ -6,7 +7,13 @@ import SuccessModal from "../SuccessModal/SuccessModal";
 import Modal from "../HomeApp/components/Modal/Modal";
 import NewTransaction from "../HomeApp/components/NewTransaction/NewTransaction";
 import DeleteTransaction from "../DeleteTransaction/DeleteTransaction";
-import TransactionsList from "./components/TransactionsList/TransactionsList";
+const TransactionsList = dynamic(
+  () => import("./components/TransactionsList/TransactionsList"),
+  {
+    loading: () => <p>Carregando transações...</p>,
+    ssr: false,
+  }
+);
 
 import { sortTransactionsByDate } from "@/utils/transactions";
 
