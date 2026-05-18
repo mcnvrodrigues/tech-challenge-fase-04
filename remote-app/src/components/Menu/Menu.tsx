@@ -44,7 +44,11 @@ export default function Menu() {
               className={`${style.menuItem} ${isActive ? style.activeItem : ""}`}
               onClick={closeMenu}
             >
-              <Link href={item.path} aria-current={isActive ? "page" : undefined} >
+             <Link
+  href={item.path}
+  prefetch
+  aria-current={isActive ? "page" : undefined}
+>
                 {item.label}
               </Link>
             </li>

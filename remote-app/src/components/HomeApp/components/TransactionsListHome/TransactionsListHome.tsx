@@ -52,7 +52,11 @@ const TransactionsListHome = ({ transaction, title }: TransactionsListHomeProps)
         })}
       </ul>
 
-      <Link href="/transacoes" className={style.transactionLink}>
+      <Link
+  href="/transacoes"
+  prefetch
+  className={style.transactionLink}
+>
         Ver mais transações
       </Link>
     </section>

@@ -35,6 +35,7 @@ export default function BoxBalance({
             width={35}
             height={35}
             alt="Esconder ou mostrar saldo"
+            loading="lazy"
             onClick={() => setIsActive(!isActive)}
           />
         </div>
