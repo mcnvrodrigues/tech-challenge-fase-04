@@ -1,5 +1,14 @@
-import { TransactionsPage } from "@/modules/transactions/presentation/pages/TransactionsPage";
+import { GetServerSideProps } from "next";
 
-export default function TransactionsRoute() {
-    return <TransactionsPage />;
+export const getServerSideProps: GetServerSideProps = async () => {
+    return {
+        redirect: {
+            destination: "/transacoes",
+            permanent: false,
+        },
+    };
+};
+
+export default function TransactionsRedirect() {
+    return null;
 }

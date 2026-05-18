@@ -4,6 +4,102 @@ Este projeto é uma aplicação financeira construída com **Next.js** e **TypeS
 
 ---
 
+O projeto foi refatorado com foco em:
+
+- modularização;
+- escalabilidade;
+- separação de responsabilidades;
+- Clean Architecture;
+- compartilhamento de componentes;
+- gerenciamento global de estado.
+
+---
+
+## 🧱 Clean Architecture
+
+O projeto foi reorganizado utilizando separação em camadas:
+
+src/modules
+
+---
+### Estrutura
+
+```
+modules/
+├── domain
+├── infrastructure
+├── presentation
+└── state
+```
+
+### Domain
+
+Regras de negócio e entidades.
+
+### Infrastructure
+
+Persistência e integrações.
+
+### Presentation
+
+Componentes, páginas e hooks.
+
+### State
+
+Gerenciamento global de estado.
+
+---
+
+## 📦 Funcionalidades
+- Cadastro de transações
+- Edição de transações
+- Exclusão de transações
+- Controle de saldo
+- Persistência local
+- Filtros por categoria
+- Filtros por período
+- Compartilhamento de componentes entre microfrontends
+
+---
+
+## 💾 Persistência
+
+Os dados são armazenados localmente utilizando:
+
+```localStorage```
+
+Chave utilizada:
+
+``` transactions:v1 ```
+
+---
+
+## 🛠️ Requisitos
+
+Antes de iniciar, você precisa ter instalado:
+
+- Node.js >= 18
+- NPM
+- Docker
+- Docker Compose
+
+## ▶️ Executando com Docker
+
+Na raiz do projeto execute:
+
+``` docker compose up --build ```
+
+## 🌐 Acesso da aplicação
+
+### Host App
+
+```http://localhost:3000```
+
+### Remote App
+```http://localhost:3001```
+
+---
+
 ## 🚀 Tecnologias Utilizadas
 
 * **Next.js** (com SSG)
@@ -13,6 +109,22 @@ Este projeto é uma aplicação financeira construída com **Next.js** e **TypeS
 * **Docker**
 * **AWS (Deploy)**
 * **Node.js / NPM**
+
+---
+
+# 🧩 Arquitetura de Microfrontends
+
+O projeto é dividido em dois módulos:
+
+| Módulo       | Descrição                                    | Porta |
+| ------------ | -------------------------------------------- | ------ |
+| `host-app`   | Aplicação principal e roteamento             | 3000   |
+| `remote-app` | Componentes e módulos compartilhados         | 3001   |
+
+A comunicação entre os módulos é realizada utilizando:
+
+
+@module-federation/nextjs-mf
 
 ---
 
@@ -95,4 +207,3 @@ Com o uso de **SSG (Static Site Generation)** sempre que possível, o projeto en
 * Redução de custos operacionais
 
 ---
-#fefe
