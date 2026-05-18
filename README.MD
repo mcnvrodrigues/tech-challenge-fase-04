@@ -123,7 +123,7 @@ O projeto é dividido em dois módulos:
 
 A comunicação entre os módulos é realizada utilizando:
 
-```txt
+
 @module-federation/nextjs-mf
 
 ---
